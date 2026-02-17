@@ -1,19 +1,6 @@
 from typing import Optional
+import requests
 
-# Mock dictionary with sample definitions
-# In a real app, this would call an external API
-MOCK_DEFINITIONS = {
-    "extraordinary": "Very unusual or remarkable.",
-    "loquacious": "Tending to talk a great deal; talkative.",
-    "comprehensive": "Complete and including everything necessary.",
-    "contemporary": "Living or occurring at the same time.",
-    "documentation": "Material that provides official information.",
-    "illuminating": "Helping to clarify or explain something.",
-    "comfortable": "Providing physical ease and relaxation.",
-    "exceptionally": "To an unusual degree; very.",
-    "particularly": "To a higher degree than is usual or average.",
-    "professor": "A university teacher of the highest rank."
-}
 
 def get_definition(word: str) -> Optional[str]:
     """
@@ -28,8 +15,20 @@ def get_definition(word: str) -> Optional[str]:
     # Clean the word: lowercase and remove punctuation
     clean_word = word.lower().strip('.,!?;:\'"')
 
-    # Look up in our mock dictionary
-    return MOCK_DEFINITIONS.get(
-        clean_word,
-        "A complex word worth looking up!"
-    )
+    # api-endpoint
+    URL = f"https://api.dictionaryapi.dev/api/v2/entries/en/{clean_word}"
+
+    
+
+    # sending get request and saving the response as response object
+    r = requests.get(url = URL)
+    if r.status_code == 404:
+
+        return "This word does not have a definition"
+    # extracting data in json format
+    data = r.json()[0]['meanings'][0]['definitions'][0]['definition']
+
+   
+    return data
+
+get_definition("complicatlp")
