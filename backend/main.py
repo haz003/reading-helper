@@ -37,7 +37,7 @@ async def process_text(file: UploadFile):
     # Read file content
     content = await file.read()
     text = content.decode("utf-8")
-
+    
     # Analyze the text
     processed_words = analyze_text(text)
 
@@ -46,3 +46,22 @@ async def process_text(file: UploadFile):
         "filename": file.filename,
         "processed_words": processed_words
     }
+@app.post("/test-text")
+async def test_text(text: str):
+    """
+    Process uploaded text file and identify hard words.
+
+    Args:
+        text string
+
+    Returns:
+        JSON with filename and processed word data
+    """
+    
+    
+    # Analyze the text
+    processed_words = analyze_text(text)
+
+    # Return structured response
+    return processed_words
+    

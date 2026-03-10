@@ -1,6 +1,7 @@
 import re
 from typing import List, Dict
 from dictionary_service import get_definition
+from wordfreq import zipf_frequency
 
 def tokenize(text: str) -> List[str]:
     """
@@ -19,6 +20,7 @@ def tokenize(text: str) -> List[str]:
     return tokens
 
 def is_hard_word(word: str) -> bool:
+
     """
     Determine if a word is "hard" based on length.
 
@@ -29,11 +31,14 @@ def is_hard_word(word: str) -> bool:
     - Use reading level algorithms (Flesch-Kincaid, etc.)
     - Call an external API for difficulty scoring
     """
-    # Remove any punctuation that might still be attached
-    clean_word = re.sub(r'[^\w]', '', word)
-
-    # Check if word is long enough to be considered "hard"
-    return len(clean_word) > 7
+    # 0 8
+    freq = zipf_frequency(word, 'en', wordlist='best', minimum=0) 
+    print(freq)
+    if  freq < 5:
+        return True
+    else :
+        return False
+    
 
 def analyze_text(text: str) -> List[Dict]:
     """
@@ -56,8 +61,9 @@ def analyze_text(text: str) -> List[Dict]:
     # Step 2: Analyze each token
     results = []
     for token in tokens:
-        # Check if this word is hard
-        is_hard = is_hard_word(token)
+        if token.isalpha() == True:
+            is_hard = is_hard_word(token)
+        
 
         # Get definition only for hard words
         definition = None
