@@ -33,7 +33,6 @@ def is_hard_word(word: str) -> bool:
     """
     # 0 8
     freq = zipf_frequency(word, 'en', wordlist='best', minimum=0) 
-    print(freq)
     if  freq < 5:
         return True
     else :

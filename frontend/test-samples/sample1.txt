@@ -1,0 +1,4 @@
+This is a sample text file for the Reading Helper frontend.
+It includes some longer or less-frequent words to test definition lookup and highlighting: loquacious, perspicacity, ambidextrous.
+
+Short words, punctuation, and newlines should be preserved.
