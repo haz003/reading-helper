@@ -3,6 +3,7 @@
 These instructions help AI coding agents (Copilot-style) work productively in this repository.
 
 ## Quick Context
+- we run the backend from backend folder not outside, so all paths are relative to backend/ (e.g. `uvicorn main:app` not `uvicorn backend.main:app`).
 - Project language: Python (backend uses FastAPI). See [backend/main.py](backend/main.py).
 - Core files: [backend/word_analyzer.py](backend/word_analyzer.py), [backend/dictionary_service.py](backend/dictionary_service.py), [backend/requirements.txt](backend/requirements.txt).
 - Docs: [docs/SETUP.md](docs/SETUP.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) contain onboarding and architecture notes.

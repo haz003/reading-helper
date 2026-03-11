@@ -1,6 +1,15 @@
+import logging
 from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from word_analyzer import analyze_text
+from backend.word_analyzer import analyze_text
+
+
+# Configure root logger for the application
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s [%(name)s] %(message)s",
+)
+logger = logging.getLogger("reading_helper")
 
 app = FastAPI()
 
@@ -21,6 +30,7 @@ def read_root():
     Returns:
         Simple message confirming API is running
     """
+    logger.info("Health check requested")
     return {"message": "Reading Helper API is running!"}
 
 @app.post("/process-text")
@@ -34,6 +44,7 @@ async def process_text(file: UploadFile):
     Returns:
         JSON with filename and processed word data
     """
+    logger.info("Received file upload: %s", file.filename)
     # Read file content
     content = await file.read()
     text = content.decode("utf-8")
@@ -59,6 +70,7 @@ async def test_text(text: str):
     """
     
     
+    logger.info("Received test-text request (len=%d)", len(text))
     # Analyze the text
     processed_words = analyze_text(text)
 

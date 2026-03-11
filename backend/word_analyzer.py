@@ -1,8 +1,12 @@
 import re
+import logging
+import time
 from typing import List, Dict, Optional
 from dictionary_service import get_definition
 from wordfreq import zipf_frequency
 import concurrent.futures
+
+logger = logging.getLogger(__name__)
 
 
 def tokenize(text: str) -> List[str]:
@@ -55,6 +59,7 @@ def analyze_text(text: str) -> List[Dict]:
         }
     """
     # Step 1: Tokenize
+    start = time.perf_counter()
     tokens = tokenize(text)
 
     # Build normalized mapping for tokens (preserve original order)
@@ -72,6 +77,8 @@ def analyze_text(text: str) -> List[Dict]:
     for w in unique_words:
         if is_hard_word(w):
             hard_words.add(w)
+
+    logger.info("Found %d unique words, %d hard candidates", len(unique_words), len(hard_words))
 
     # Fetch definitions for hard words in parallel (cached in dictionary_service)
     definitions: Dict[str, Optional[str]] = {}
@@ -103,4 +110,6 @@ def analyze_text(text: str) -> List[Dict]:
             "definition": definition
         })
 
+    elapsed = time.perf_counter() - start
+    logger.info("analyze_text completed in %.3f sec (tokens=%d, results=%d)", elapsed, len(tokens), len(results))
     return results
