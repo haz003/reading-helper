@@ -1,7 +1,7 @@
 import logging
 from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from backend.word_analyzer import analyze_text
+from word_analyzer import analyze_text
 
 
 # Configure root logger for the application
