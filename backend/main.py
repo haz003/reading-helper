@@ -2,7 +2,8 @@ import logging
 from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from word_analyzer import analyze_text
-
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 # Configure root logger for the application
 logging.basicConfig(
@@ -21,17 +22,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.get("/")
-def read_root():
-    """
-    Health check endpoint.
-
-    Returns:
-        Simple message confirming API is running
-    """
-    logger.info("Health check requested")
-    return {"message": "Reading Helper API is running!"}
 
 @app.post("/process-text")
 async def process_text(file: UploadFile):
@@ -76,4 +66,14 @@ async def test_text(text: str):
 
     # Return structured response
     return processed_words
-    
+
+# Mount the static files directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+def serve_frontend():
+    """
+    Serve the React app's index.html for the root URL.
+    """
+    return FileResponse("static/index.html")
+
